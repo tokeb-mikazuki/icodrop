@@ -18,7 +18,7 @@
 |:---:|:---:|
 | <img src="docs/preview-drops.jpg" width="420"> | <img src="docs/preview-glass.jpg" width="420"> |
 
-위 이미지는 실제 바탕화면을 캡처한 것이 아니라, 앱의 렌더링 코드(`BlurEngine.RenderFrame`)에 샘플 배경과 아이콘 배치를 넣어 그린 것입니다. 배경([`docs/wallpaper.jpg`](docs/wallpaper.jpg))은 [`tools/make-wallpaper.ps1`](tools/make-wallpaper.ps1)으로 직접 생성한 이미지이고, 아이콘 위의 블러 영역은 앱이 만드는 결과와 같은 코드로 그렸습니다. 아이콘과 이름은 각 소유자의 상표이며 예시를 위해서만 사용했습니다. 다시 만들려면 `tools\build-previews.ps1`을 실행하세요.
+위 이미지는 실제 바탕화면을 캡처한 것이 아니라, 앱의 렌더링 코드(`BlurEngine.RenderFrame`)에 샘플 배경과 아이콘 배치를 넣어 그린 것입니다. 배경([`docs/wallpaper.jpg`](docs/wallpaper.jpg))은 Zetong Li의 [도서관 서가 사진](https://unsplash.com/photos/xYyJAC0IdyI)으로 [Unsplash 라이선스](https://unsplash.com/license)에 따라 사용했고, 아이콘 위의 블러 영역은 앱이 만드는 결과와 같은 코드로 그렸습니다. 아이콘과 이름은 각 소유자의 상표이며 예시를 위해서만 사용했습니다. 다시 만들려면 `tools\build-previews.ps1`을 실행하세요.
 
 ## 어떻게 동작하나
 
