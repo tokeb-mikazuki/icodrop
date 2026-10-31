@@ -450,7 +450,7 @@ namespace WallBlur
 
             // the one switch that matters
             Border master = Card();
-            master.Child = SwitchRow("블러 사용", null, settings.Enabled,
+            master.Child = SwitchRow("블러 효과", null, settings.Enabled,
                 delegate(bool on) { settings.Enabled = on; apply(false); });
             body.Children.Add(master);
 
@@ -461,23 +461,23 @@ namespace WallBlur
             // and once the details are open they sit in their own sections instead.
             current = null;
             StackPanel stage = new StackPanel();
-            AddSlider(stage, "블러 정도", 0, 80, 0.5, 1, "px", true,
+            AddSlider(stage, "블러 강도", 0, 80, 0.5, 1, "px", true,
                 delegate(Settings x) { return x.Blur; }, delegate(Settings x, double v) { x.Blur = v; });
             Row rBlur = rows[rows.Count - 1];
-            AddSlider(stage, "그림자 정도", 0, 100, 0.5, 0.01, "%", false,
+            AddSlider(stage, "그림자 강도", 0, 100, 0.5, 0.01, "%", false,
                 delegate(Settings x) { return x.ShadowOpacity; }, delegate(Settings x, double v) { x.ShadowOpacity = v; });
             Row rShadow = rows[rows.Count - 1];
-            AddSlider(stage, "블러 경계 feather", 2, 80, 0.5, 1, "px", false,
+            AddSlider(stage, "블러 경계", 2, 80, 0.5, 1, "px", false,
                 delegate(Settings x) { return x.Feather; }, delegate(Settings x, double v) { x.Feather = v; });
             Row rFeather = rows[rows.Count - 1];
-            AddSlider(stage, "그림자 feather", 4, 120, 0.5, 1, "px", false,
+            AddSlider(stage, "그림자 경계", 4, 120, 0.5, 1, "px", false,
                 delegate(Settings x) { return x.ShadowSize; }, delegate(Settings x, double v) { x.ShadowSize = v; });
             Row rSize = rows[rows.Count - 1];
-            AddSlider(stage, "그림자 아래 이동", 0, 40, 0.5, 1, "px", false,
+            AddSlider(stage, "그림자 위치", 0, 40, 0.5, 1, "px", false,
                 delegate(Settings x) { return x.ShadowOffset; }, delegate(Settings x, double v) { x.ShadowOffset = v; });
             Row rOffset = rows[rows.Count - 1];
 
-            Section mainSec = BeginSection("조절");
+            Section mainSec = BeginSection("기본");
             StackPanel mainPanel = new StackPanel();
             Border mainCard = Wrap(mainPanel);
             body.Children.Add(mainCard);
@@ -533,19 +533,19 @@ namespace WallBlur
             current = BeginSection("형태");
             StackPanel shape = new StackPanel();
             detail.Children.Add(Wrap(shape));
-            AddSlider(shape, "블러 영역 밝기", -30, 40, 0.5, 0.01, "%", true,
+            AddSlider(shape, "블러 밝기", -30, 40, 0.5, 0.01, "%", true,
                 delegate(Settings x) { return x.Brightness; }, delegate(Settings x, double v) { x.Brightness = v; });
-            AddSlider(shape, "아이콘 주변 여백", 0, 60, 0.5, 1, "px", false,
+            AddSlider(shape, "아이콘 여백", 0, 60, 0.5, 1, "px", false,
                 delegate(Settings x) { return x.Padding; }, delegate(Settings x, double v) { x.Padding = v; });
             AddSlider(shape, "모서리 둥글기", 0, 60, 0.5, 1, "px", false,
                 delegate(Settings x) { return x.Radius; }, delegate(Settings x, double v) { x.Radius = v; });
-            AddSlider(shape, "윤곽 매끄러움", 0, 100, 0.5, 1, "px", false,
+            AddSlider(shape, "윤곽 보정", 0, 100, 0.5, 1, "px", false,
                 delegate(Settings x) { return x.Contour; }, delegate(Settings x, double v) { x.Contour = v; });
 
             current = null;
             detail.Children.Add(Caption("일반"));
             Border general = Card();
-            general.Child = SwitchRow("Windows 시작 시 실행", null, getAutoStart(),
+            general.Child = SwitchRow("로그인 시 자동 실행", null, getAutoStart(),
                 delegate(bool on) { setAutoStart(on); });
             detail.Children.Add(general);
 
@@ -606,7 +606,7 @@ namespace WallBlur
             TextBlock title = Label("icodrop", 22, false);
             title.FontWeight = FontWeights.SemiBold;
             titles.Children.Add(title);
-            titles.Children.Add(Label("배경과 아이콘을 더욱 조화롭게", 12, true));
+            titles.Children.Add(Label("바탕화면 아이콘을 깔끔하게", 12, true));
             Grid.SetColumn(titles, 1);
             g.Children.Add(titles);
             return g;
@@ -619,7 +619,7 @@ namespace WallBlur
 
         UIElement BuildStyleSwitcher()
         {
-            string[] names = new string[] { "수면", "방울", "유리" };
+            string[] names = new string[] { "잔물결", "물방울", "유리" };
             Border track = new Border();
             track.CornerRadius = new CornerRadius(10);
             track.Padding = new Thickness(3);
@@ -990,7 +990,7 @@ namespace WallBlur
         {
             Button b = new Button();
             b.Style = (Style)FindResource("ResetBtn");
-            b.ToolTip = "기본값으로";
+            b.ToolTip = "재설정";
             b.Click += delegate { ResetSection(sec); };
             sec.Reset = b;
             return b;
@@ -1009,7 +1009,7 @@ namespace WallBlur
             debounce.Start();
         }
 
-        /// <summary>True when every value the style presets control equals the first preset ("수면").</summary>
+        /// <summary>True when every value the style presets control equals the first preset ("잔물결").</summary>
         bool MatchesSurfaceLook()
         {
             Settings d = new Settings();

@@ -191,23 +191,23 @@ namespace IcodropSetup
             string exe = Path.Combine(o.Dir, "icodrop.exe");
             string uninstaller = Path.Combine(o.Dir, "uninstall.exe");
 
-            progress("실행 중인 icodrop을 종료하는 중...", 0.05);
+            progress("실행 중인 icodrop 종료 중...", 0.05);
             StopRunning();
 
-            progress("파일을 복사하는 중...", 0.25);
+            progress("파일 복사 중...", 0.25);
             Directory.CreateDirectory(o.Dir);
             Extract("payload.exe", exe);
             string self = Assembly.GetExecutingAssembly().Location;
             if (!string.Equals(Path.GetFullPath(self), Path.GetFullPath(uninstaller), StringComparison.OrdinalIgnoreCase))
                 File.Copy(self, uninstaller, true);
 
-            progress("바로가기를 만드는 중...", 0.5);
-            if (o.DesktopShortcut) CreateShortcut(DesktopLink, exe, "icodrop - 배경과 아이콘을 더욱 조화롭게");
+            progress("바로가기 생성 중...", 0.5);
+            if (o.DesktopShortcut) CreateShortcut(DesktopLink, exe, "icodrop - 바탕화면 아이콘을 깔끔하게");
             else DeleteQuietly(DesktopLink);
-            if (o.StartMenu) CreateShortcut(StartMenuLink, exe, "icodrop - 배경과 아이콘을 더욱 조화롭게");
+            if (o.StartMenu) CreateShortcut(StartMenuLink, exe, "icodrop - 바탕화면 아이콘을 깔끔하게");
             else DeleteQuietly(StartMenuLink);
 
-            progress("Windows에 등록하는 중...", 0.7);
+            progress("시스템 등록 중...", 0.7);
             using (RegistryKey k = Registry.CurrentUser.CreateSubKey(UninstallKey))
             {
                 k.SetValue("DisplayName", AppName);
@@ -222,7 +222,7 @@ namespace IcodropSetup
             }
             WriteAutoStart(o.AutoStart, exe);
 
-            progress("마무리하는 중...", 0.95);
+            progress("마무리 중...", 0.95);
             if (o.LaunchAfter) Process.Start(new ProcessStartInfo(exe) { WorkingDirectory = o.Dir });
             progress("완료", 1.0);
         }
@@ -233,11 +233,11 @@ namespace IcodropSetup
         {
             string dir = FindInstalled() ?? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-            progress("실행 중인 icodrop을 종료하는 중...", 0.1);
+            progress("실행 중인 icodrop 종료 중...", 0.1);
             StopRunning();
             RestoreWallpaperIfOurs();
 
-            progress("바로가기와 자동 실행 등록을 지우는 중...", 0.4);
+            progress("바로가기 및 자동 실행 삭제 중...", 0.4);
             DeleteQuietly(DesktopLink);
             DeleteQuietly(StartMenuLink);
             using (RegistryKey k = Registry.CurrentUser.OpenSubKey(RunKey, true))
@@ -245,12 +245,12 @@ namespace IcodropSetup
 
             if (o.RemoveData)
             {
-                progress("설정과 생성된 배경 이미지를 지우는 중...", 0.6);
+                progress("설정 및 배경 이미지 삭제 중...", 0.6);
                 try { if (Directory.Exists(DataDir)) Directory.Delete(DataDir, true); } catch (Exception) { }
                 try { if (Directory.Exists(ImageDir)) Directory.Delete(ImageDir, true); } catch (Exception) { }
             }
 
-            progress("프로그램을 지우는 중...", 0.8);
+            progress("프로그램 삭제 중...", 0.8);
             Registry.CurrentUser.DeleteSubKeyTree(UninstallKey, false);
             DeleteQuietly(Path.Combine(dir, "icodrop.exe"));
 
@@ -500,12 +500,12 @@ namespace IcodropSetup
 
             if (uninstall)
             {
-                root.Children.Add(Header("icodrop 제거", "원래 배경화면으로 되돌린 뒤 프로그램을 지워요"));
+                root.Children.Add(Header("icodrop 제거", "배경화면을 원복하고 프로그램을 삭제해요"));
                 StackPanel u = new StackPanel();
-                cbData = Check("설정과 생성된 배경 이미지도 함께 삭제", false);
+                cbData = Check("개인 설정 및 배경 이미지 함께 삭제", false);
                 cbData.Margin = new Thickness(0);
                 u.Children.Add(cbData);
-                TextBlock hint = Text("체크하지 않으면 다시 설치할 때 설정이 그대로 남아 있어요.", 12, true, null);
+                TextBlock hint = Text("해제 시 재설치할 때 기존 설정을 유지해요.", 12, true, null);
                 hint.Margin = new Thickness(34, 4, 0, 0);
                 u.Children.Add(hint);
                 root.Children.Add(Card(u));
@@ -515,7 +515,7 @@ namespace IcodropSetup
                 return;
             }
 
-            root.Children.Add(Header("icodrop 설치", "배경과 아이콘을 더욱 조화롭게"));
+            root.Children.Add(Header("icodrop 설치", "바탕화면 아이콘을 깔끔하게"));
 
             StackPanel where = new StackPanel();
             where.Children.Add(Text("설치 위치", 13, true, null));
@@ -539,16 +539,16 @@ namespace IcodropSetup
             root.Children.Add(Card(where));
 
             StackPanel opts = new StackPanel();
-            cbDesktop = Check("바탕화면에 바로가기 만들기", true);
+            cbDesktop = Check("바탕화면 바로가기 생성", true);
             cbMenu = Check("시작 메뉴에 추가", true);
-            cbAuto = Check("Windows 시작 시 자동 실행", true);
-            cbRun = Check("설치가 끝나면 바로 실행", true);
+            cbAuto = Check("로그인 시 자동 실행", true);
+            cbRun = Check("설치 후 실행", true);
             opts.Children.Add(cbDesktop); opts.Children.Add(cbMenu); opts.Children.Add(cbAuto); opts.Children.Add(cbRun);
             root.Children.Add(Card(opts));
 
             if (existing != null)
             {
-                TextBlock note = Text("이미 설치되어 있어요. 이어서 진행하면 최신 버전으로 업데이트돼요.", 12, true, null);
+                TextBlock note = Text("이미 설치되어 있어요. 최신 버전으로 업데이트해요.", 12, true, null);
                 note.Margin = new Thickness(4, 0, 0, 10);
                 root.Children.Add(note);
             }
@@ -561,7 +561,7 @@ namespace IcodropSetup
         void ChooseFolder()
         {
             System.Windows.Forms.FolderBrowserDialog dlg = new System.Windows.Forms.FolderBrowserDialog();
-            dlg.Description = "icodrop을 설치할 폴더를 선택하세요";
+            dlg.Description = "icodrop을 설치할 폴더를 선택하세요.";
             dlg.SelectedPath = pathBox.Text;
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -593,16 +593,16 @@ namespace IcodropSetup
             root.Children.Clear();
             if (error != null)
             {
-                root.Children.Add(Header("문제가 생겼어요", uninstall ? "제거를 끝내지 못했어요" : "설치를 끝내지 못했어요"));
+                root.Children.Add(Header("오류가 발생했어요", uninstall ? "제거를 완료하지 못했어요" : "설치를 완료하지 못했어요"));
                 root.Children.Add(Card(Text(error, 12.5, true, null)));
             }
             else if (uninstall)
             {
-                root.Children.Add(Header("제거했어요", "icodrop을 이 컴퓨터에서 지웠어요"));
+                root.Children.Add(Header("제거 완료", "icodrop 삭제가 끝났어요"));
             }
             else
             {
-                root.Children.Add(Header("설치가 끝났어요", options.LaunchAfter ? "icodrop이 작업 표시줄 트레이에서 실행 중이에요" : "시작 메뉴나 바탕화면에서 실행할 수 있어요"));
+                root.Children.Add(Header("설치 완료", options.LaunchAfter ? "icodrop이 작업 표시줄 트레이에서 실행 중이에요" : "시작 메뉴나 바탕화면에서 실행할 수 있어요"));
             }
             root.Children.Add(ButtonRow(MakeButton("닫기", "Primary", delegate { Close(); })));
         }

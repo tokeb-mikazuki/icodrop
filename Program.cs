@@ -104,22 +104,22 @@ namespace WallBlur
         {
             ContextMenuStrip menu = new ContextMenuStrip();
 
-            ToolStripMenuItem open = new ToolStripMenuItem("설정 열기...");
+            ToolStripMenuItem open = new ToolStripMenuItem("설정...");
             open.Font = new Font(open.Font, FontStyle.Bold);
             open.Click += delegate { ShowSettings(); };
             menu.Items.Add(open);
             menu.Items.Add(new ToolStripSeparator());
 
-            ToolStripMenuItem enabled = new ToolStripMenuItem("블러 사용");
+            ToolStripMenuItem enabled = new ToolStripMenuItem("블러 효과");
             enabled.Click += delegate { settings.Enabled = !settings.Enabled; Apply(false); };
             menu.Items.Add(enabled);
 
-            ToolStripMenuItem auto = new ToolStripMenuItem("Windows 시작 시 자동 실행");
+            ToolStripMenuItem auto = new ToolStripMenuItem("로그인 시 자동 실행");
             auto.Click += delegate { SetAutoStart(!IsAutoStart()); };
             menu.Items.Add(auto);
             menu.Items.Add(new ToolStripSeparator());
 
-            ToolStripMenuItem exit = new ToolStripMenuItem("종료 (원래 배경으로 복원)");
+            ToolStripMenuItem exit = new ToolStripMenuItem("종료");
             exit.Click += delegate { app.Shutdown(); };
             menu.Items.Add(exit);
 
